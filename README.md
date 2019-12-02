@@ -1,0 +1,1 @@
+# BrightHive Data Trust Logger
