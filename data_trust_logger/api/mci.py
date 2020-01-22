@@ -5,10 +5,14 @@ A simple API for returning health statistics from MCI.
 """
 
 from flask import Blueprint, request
-from flask_restful import Resource, Api
+from flask_restful import Api, Resource
+from sqlalchemy import MetaData, Table, create_engine
 
-import data_trust_logger.utilities.responses as resp
 import data_trust_logger.utilities.fake_results as fake
+import data_trust_logger.utilities.responses as resp
+from data_trust_logger.config import ConfigurationFactory
+
+config = ConfigurationFactory.from_env()
 
 
 class MCIHealthCheckResource(Resource):
@@ -20,7 +24,14 @@ class MCIHealthCheckResource(Resource):
                           '/mci/employment_status', '/mci/education_level']
 
     def get(self):
-        # TODO: This method should retrieve values from the MCI in the future
+        engine = create_engine(config.MCI_DATABASE_URI)
+        metadata = MetaData(bind=engine)
+
+        # TODO: Dynamically do this for each endpoint. (N.b., might need a special case for `users`/Individual)
+        individual = Table('individual', metadata, autoload=True)
+        results = engine.execute(individual.count())
+        count = results.first()[0]   
+
         return self.response.get_one_response(fake.generate_fake_results(self.endpoints))
 
 
