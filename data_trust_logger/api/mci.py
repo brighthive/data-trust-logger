@@ -28,8 +28,8 @@ class MCIHealthCheckResource(Resource):
         }
 
     def get(self):
-        engine = create_engine(config.MCI_DATABASE_URI)
-        endpoints_blob = generate_endpoints_blob(engine, config.MCI_URL, self.endpoints, self.table_to_ep_mappings)
+        engine = create_engine(config.mci_psql_uri)
+        endpoints_blob = generate_endpoints_blob(engine, config.mci_url, self.endpoints, self.table_to_ep_mappings)
 
         return self.response.get_one_response(endpoints_blob)
 

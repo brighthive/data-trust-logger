@@ -1,67 +1,121 @@
 import os
+import json
 
-class Config(object):
-    DEBUG = False
-    TESTING = False
+class ConfigurationError(Exception):
+    pass
 
 
-class DevelopmentConfig(Config):
+class Configuration(object):
+    def find_json_config_file(self):
+        """Find JSON configuration file.
+        Locate the JSON configuration relative to the application path.
+        Returns:
+            str: Configuration file.
+        Raises:
+            ConfigurationError: If the configuration file cannot be found.
+        """
+
+        absolute_path = os.path.dirname(os.path.abspath(__file__))
+        config_file = os.path.join(absolute_path, 'config.json')
+
+        if os.path.exists(config_file) and os.path.isfile(config_file):
+            return config_file
+        else:
+            raise ConfigurationError(
+                'Cannot find configuration file in path {}.'.format(absolute_path))
+
+    def load_json_config(self, config_file: str):
+        """Load application configuration from JSON file.
+        Args:
+            config_file (str): The path and name of the configuration file to load.
+        Returns:
+            dict: Configuration object.
+        Raises:
+            ConfigurationError: If the configuration file doesn't exist or
+                cannot be loaded because of a syntax error.
+        """
+
+        if not os.path.exists(config_file) or not os.path.isfile(config_file):
+            raise ConfigurationError(
+                'Error loading configuration file {}.'.format(config_file))
+
+        try:
+            with open(config_file, 'r') as f:
+                data = json.load(f)
+            return data
+        except Exception:
+            raise ConfigurationError(
+                'Failed to load configuration file {}. Please check the configuration file.'.format(config_file))
+
+    def from_json(self, environment='development'):
+        """Load application configuration from JSON object based on the configuration type.
+        Args:
+            environment (str): The environment to load.
+        Raises:
+            ConfigurationError: If the JSON configuration cannot be loaded.
+        """
+
+        config_file = self.find_json_config_file()
+        data = self.load_json_config(config_file)
+        if environment in data.keys():
+            fields = data[environment]
+            try:
+                self.dr_url = fields['data_resources']['dr_url']
+                self.dr_psql_user = fields['data_resources']['dr_psql_user']
+                self.dr_psql_password = fields['data_resources']['dr_psql_password']
+                self.dr_psql_hostname = fields['data_resources']['dr_psql_hostname']
+                self.dr_psql_port = fields['data_resources']['dr_psql_port']
+                self.dr_psql_database = fields['data_resources']['dr_psql_database']
+
+                self.mci_url = fields['master_client_index']['mci_url']
+                self.mci_psql_user = fields['master_client_index']['mci_psql_user']
+                self.mci_psql_password = fields['master_client_index']['mci_psql_password']
+                self.mci_psql_hostname = fields['master_client_index']['mci_psql_hostname']
+                self.mci_psql_port = fields['master_client_index']['mci_psql_port']
+                self.mci_psql_database = fields['master_client_index']['mci_psql_database']
+
+                self.environment = environment
+                self.debug = True
+                self.testing = True
+            except Exception:
+                raise ConfigurationError(
+                    'Invalid key in JSON configuration. Please check the configuration.')
+            else:
+                self.dr_psql_uri = 'postgresql://{}:{}@{}:{}/{}'.format(
+                    self.dr_psql_user,
+                    self.dr_psql_password,
+                    self.dr_psql_hostname,
+                    self.dr_psql_port,
+                    self.dr_psql_database
+                )
+
+                self.mci_psql_uri = 'postgresql://{}:{}@{}:{}/{}'.format(
+                    self.mci_psql_user,
+                    self.mci_psql_password,
+                    self.mci_psql_hostname,
+                    self.mci_psql_port,
+                    self.mci_psql_database
+                )
+
+        else:
+            raise ConfigurationError(
+                'Cannot find environment \'{}\' in JSON configuration.')
+
+
+class DevelopmentConfiguration(Configuration):
+    """Development configuration class."""
+
     def __init__(self):
-        super().__init__()
-        os.environ['FLASK_ENV'] = 'development'
+        self.from_json()
+        self.debug = True
+        self.testing = False
 
-    DEBUG = True
-
-    DR_URL = 'http://0.0.0.0:8001'
-    DR_PSQL_USER = 'test_user'
-    DR_PSQL_PASSWORD = 'test_password'
-    DR_PSQL_HOSTNAME = 'localhost' 
-    DR_PSQL_PORT = '5433'
-    DR_PSQL_DATABASE = 'data_resource_dev'
-    DR_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
-        DR_PSQL_USER,
-        DR_PSQL_PASSWORD,
-        DR_PSQL_HOSTNAME,
-        DR_PSQL_PORT,
-        DR_PSQL_DATABASE
-    )
-
-    MCI_URL = 'http://0.0.0.0:8000'
-    MCI_PSQL_USER = 'brighthive'
-    MCI_PSQL_PASSWORD = 'test_password'
-    MCI_PSQL_HOSTNAME = 'localhost' 
-    # MCI_PSQL_HOSTNAME = 'docker_postgres_mci_1'
-    # If the Logger API is running in a Docker container, then connect to the 
-    # mci psql container, rather than localhost. (Same for DR_PSQL_HOSTNAME.)
-    MCI_PSQL_PORT = '5432'
-    MCI_PSQL_DATABASE = 'mci_dev'
-    MCI_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
-        MCI_PSQL_USER,
-        MCI_PSQL_PASSWORD,
-        MCI_PSQL_HOSTNAME,
-        MCI_PSQL_PORT,
-        MCI_PSQL_DATABASE
-    )
 
 class ConfigurationFactory(object):
     @staticmethod
     def get_config(config_type: str):
-        """Return a configuration by it's type.
-        Primary factory method that returns a configuration object based on the provided configuration type.
-        Args:
-            config_type (str): Configuration factory type return. May be one of:
-                - TEST
-                - DEVELOPMENT
-                - INTEGRATION
-                - SANDBOX
-                - PRODUCTION
-        Returns:
-            object: Configuration object based on the specified config_type.
-        """
         if config_type.upper() == 'DEVELOPMENT':
-            return DevelopmentConfig()
-        elif config_type.upper() == 'TEST':
-            return TestConfig()
+            return DevelopmentConfiguration()
 
     @staticmethod
     def from_env():

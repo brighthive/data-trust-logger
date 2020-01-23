@@ -22,12 +22,12 @@ class DataResourcesHealthCheckResource(Resource):
         self.response = resp.ResponseBody()
 
     def get(self):
-        engine = create_engine(config.DR_DATABASE_URI)
+        engine = create_engine(config.dr_psql_uri)
         table_names = engine.table_names()
         tables = ['alembic_version', 'checksums', 'logs']
         endpoints = [endpoint for endpoint in table_names if endpoint not in tables and "\\" not in endpoint]
         
-        endpoints_blob = generate_endpoints_blob(engine, config.DR_URL, endpoints)
+        endpoints_blob = generate_endpoints_blob(engine, config.dr_url, endpoints)
 
         return self.response.get_one_response(endpoints_blob)
 
