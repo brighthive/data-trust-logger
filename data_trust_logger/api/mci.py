@@ -10,8 +10,7 @@ from sqlalchemy import create_engine
 
 import data_trust_logger.utilities.responses as resp
 from data_trust_logger.config import ConfigurationFactory
-from data_trust_logger.utilities.health_helper import (
-    get_endpoint_record_count, get_endpoint_status)
+from data_trust_logger.utilities.health_helper import generate_endpoints_blob
 
 config = ConfigurationFactory.from_env()
 
@@ -30,23 +29,9 @@ class MCIHealthCheckResource(Resource):
 
     def get(self):
         engine = create_engine(config.MCI_DATABASE_URI)
-        endpoints_msg = {'endpoints': []}
-        for endpoint in self.endpoints:
-            try:
-                tablename = self.table_to_ep_mappings[endpoint]
-            except KeyError:
-                tablename = endpoint
-            
-            status = get_endpoint_status(f"{config.MCI_URL}/{endpoint}")
-            count = get_endpoint_record_count(engine, tablename)
-            
-            endpoints_msg['endpoints'].append({
-                'endpoint': endpoint,
-                'record_count': count,
-                'endpoint_health': status
-            })
+        endpoints_blob = generate_endpoints_blob(engine, config.MCI_URL, self.endpoints, self.table_to_ep_mappings)
 
-        return self.response.get_one_response(endpoints_msg)
+        return self.response.get_one_response(endpoints_blob)
 
 
 mci_health_bp = Blueprint('mci_health_ep', __name__)
