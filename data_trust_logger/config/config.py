@@ -12,16 +12,29 @@ class DevelopmentConfig(Config):
 
     DEBUG = True
 
-    MCI_URL = 'http://0.0.0.0:8000'
+    DR_URL = 'http://0.0.0.0:8001'
+    DR_PSQL_USER = 'test_user'
+    DR_PSQL_PASSWORD = 'test_password'
+    DR_PSQL_HOSTNAME = 'localhost' 
+    DR_PSQL_PORT = '5433'
+    DR_PSQL_DATABASE = 'data_resource_dev'
+    DR_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
+        DR_PSQL_USER,
+        DR_PSQL_PASSWORD,
+        DR_PSQL_HOSTNAME,
+        DR_PSQL_PORT,
+        DR_PSQL_DATABASE
+    )
 
+    MCI_URL = 'http://0.0.0.0:8000'
     MCI_PSQL_USER = 'brighthive'
     MCI_PSQL_PASSWORD = 'test_password'
-    MCI_PSQL_DATABASE = 'mci_dev'
-    MCI_PSQL_PORT = '5432'
     MCI_PSQL_HOSTNAME = 'localhost' 
     # MCI_PSQL_HOSTNAME = 'docker_postgres_mci_1'
     # If the Logger API is running in a Docker container, then connect to the 
-    # mci psql container, rather than localhost. 
+    # mci psql container, rather than localhost. (Same for DR_PSQL_HOSTNAME.)
+    MCI_PSQL_PORT = '5432'
+    MCI_PSQL_DATABASE = 'mci_dev'
     MCI_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
         MCI_PSQL_USER,
         MCI_PSQL_PASSWORD,

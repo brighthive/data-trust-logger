@@ -6,13 +6,12 @@ A simple API for returning health statistics from MCI.
 
 from flask import Blueprint, request
 from flask_restful import Api, Resource
-from sqlalchemy import MetaData, Table, create_engine
+from sqlalchemy import create_engine
 
-from data_trust_logger.utilities.health_helper import get_endpoint_status, get_endpoint_record_count
-import data_trust_logger.utilities.fake_results as fake
 import data_trust_logger.utilities.responses as resp
 from data_trust_logger.config import ConfigurationFactory
-
+from data_trust_logger.utilities.health_helper import (
+    get_endpoint_record_count, get_endpoint_status)
 
 config = ConfigurationFactory.from_env()
 
