@@ -74,6 +74,11 @@ class Configuration(object):
                 self.mci_psql_port = fields['master_client_index']['mci_psql_port']
                 self.mci_psql_database = fields['master_client_index']['mci_psql_database']
 
+                self.client_id = fields['auth_access']['client_id']
+                self.client_secret = fields['auth_access']['client_secret']
+                self.audience = fields['auth_access']['audience']
+                self.oauth2_url = fields['auth_access']['oauth2_url']
+
                 self.environment = environment
                 self.debug = True
                 self.testing = True

@@ -15,6 +15,12 @@
             "mci_psql_hostname": "localhost" ,
             "mci_psql_port": "5432",
             "mci_psql_database": "mci_dev"
+        },
+        "auth_access": {
+            "client_id": "XXXXXX", 
+            "client_secret": "XXXXXXXX",
+            "audience": "XXXXXXXXXX",
+            "oauth2_url": "http://XXXXXXXX"
         }
     }
 }

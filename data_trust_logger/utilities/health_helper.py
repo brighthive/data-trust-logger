@@ -1,8 +1,11 @@
 import requests
 
+from data_trust_logger.utilities import secure_requests
+
+
 def _get_endpoint_status(api_ep: str):
     try:
-        response = requests.get(ap_ep)
+        response = secure_requests.secure_get(api_ep)
         status = response.status_code
     except Exception:
         # TODO: Is this the best error?
