@@ -12,6 +12,8 @@ class DevelopmentConfig(Config):
 
     DEBUG = True
 
+    MCI_URL = 'http://0.0.0.0:8000'
+
     MCI_PSQL_USER = 'brighthive'
     MCI_PSQL_PASSWORD = 'test_password'
     MCI_PSQL_DATABASE = 'mci_dev'

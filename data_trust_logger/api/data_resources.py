@@ -19,7 +19,21 @@ class DataResourcesHealthCheckResource(Resource):
         self.endpoints = ['/programs', '/providers', '/credentials', '/referrals']
 
     def get(self):
-        # TODO: This method should retrieve values from the various data resource APIs in the future
+        
+        # table_names = engine.table_names()
+
+
+        # metadata = MetaData(bind=engine)
+
+        # metadata.reflect()
+        # tables = metadata.tables.keys()
+
+        # # TODO: Dynamically do this for each endpoint. (N.b., might need a special case for `users`/Individual)
+        # individual = Table('individual', metadata, autoload=True)
+        # results = engine.execute(individual.count())
+        # count = results.first()[0]   
+
+        
         return self.response.get_one_response(fake.generate_fake_results(self.endpoints))
 
 
