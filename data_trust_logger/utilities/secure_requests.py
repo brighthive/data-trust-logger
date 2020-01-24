@@ -39,7 +39,7 @@ def _get_access_token():
 
 
 def secure_get(url: str):
-    """Conveniene method for GET requests against API resources.
+    """Convenience method for GET requests against API resources.
     Args:
         url (str): The URL for the GET request.
     Returns:
@@ -47,7 +47,6 @@ def secure_get(url: str):
         None: If no results found.
     """
 
-    results = None
     token = _get_access_token()
 
     if token:
@@ -56,9 +55,4 @@ def secure_get(url: str):
             'authorization': 'bearer {}'.format(token)
         }
 
-        r = requests.get(url, headers=headers)
-
-        if r.status_code == 200:
-            results = r.json()
-    
-    return results
+        return requests.get(url, headers=headers)

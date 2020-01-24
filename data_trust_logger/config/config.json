@@ -17,10 +17,10 @@
             "mci_psql_database": "mci_dev"
         },
         "auth_access": {
-            "client_id": "XXXXXX", 
-            "client_secret": "XXXXXXXX",
-            "audience": "XXXXXXXXXX",
-            "oauth2_url": "http://XXXXXXXX"
+            "client_id": "8f0OYg1Beyn466hiyOJVdkveFwVvoFOi", 
+            "client_secret": "pXIMA0Soou1NAgCBjgRGf_uaSqLIkWpb24hccFv8D_COjtHlv1W-R_RkGbaLfT_Y",
+            "audience": "http://localhost:8000",
+            "oauth2_url": "https://brighthive-test.auth0.com/oauth/token"
         }
     }
 }

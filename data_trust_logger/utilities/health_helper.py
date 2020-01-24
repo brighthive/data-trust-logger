@@ -8,7 +8,6 @@ def _get_endpoint_status(api_ep: str):
         response = secure_requests.secure_get(api_ep)
         status = response.status_code
     except Exception:
-        # TODO: Is this the best error?
         status = 'API error'
     
     return status
@@ -18,8 +17,7 @@ def _get_endpoint_record_count(engine, endpoint: str):
         result = engine.execute(f"SELECT COUNT(*) from {endpoint}")
         count, = result.fetchone()
     except Exception:
-        # TODO: Is this the best error?
-        count = "Database error"
+        count = 'Database error'
     
     return count
 

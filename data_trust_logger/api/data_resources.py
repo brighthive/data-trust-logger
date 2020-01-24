@@ -23,9 +23,10 @@ class DataResourcesHealthCheckResource(Resource):
 
     def get(self):
         engine = create_engine(config.dr_psql_uri)
+        # TODO: Can we assume that all tables, excluding JOIN tables and the metatables, correspond to an API endpoint?
         table_names = engine.table_names()
-        tables = ['alembic_version', 'checksums', 'logs']
-        endpoints = [endpoint for endpoint in table_names if endpoint not in tables and "\\" not in endpoint]
+        metatables = ['alembic_version', 'checksums', 'logs']
+        endpoints = [endpoint for endpoint in table_names if endpoint not in metatables and "\\" not in endpoint]
         
         endpoints_blob = generate_endpoints_blob(engine, config.dr_url, endpoints)
 
