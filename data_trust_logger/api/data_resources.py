@@ -6,10 +6,11 @@ A simple API for returning health statistics from Data Resources.
 
 from flask import Blueprint, request
 from flask_restful import Api, Resource
-from sqlalchemy import MetaData, Table, create_engine
+from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 
-from data_trust_logger.config import ConfigurationFactory
 import data_trust_logger.utilities.responses as resp
+from data_trust_logger.config import ConfigurationFactory
 from data_trust_logger.utilities.health_helper import generate_endpoints_blob
 
 config = ConfigurationFactory.from_env()
@@ -23,8 +24,12 @@ class DataResourcesHealthCheckResource(Resource):
 
     def get(self):
         engine = create_engine(config.dr_psql_uri)
-        # TODO: Can we assume that all tables, excluding JOIN tables and the metatables, correspond to an API endpoint?
-        table_names = engine.table_names()
+
+        try:
+            table_names = engine.table_names()
+        except OperationalError:
+            table_names = []
+
         metatables = ['alembic_version', 'checksums', 'logs']
         endpoints = [endpoint for endpoint in table_names if endpoint not in metatables and "\\" not in endpoint]
         

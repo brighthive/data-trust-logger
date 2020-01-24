@@ -12,7 +12,7 @@ def _get_endpoint_status(api_ep: str):
     
     return status
 
-def _get_endpoint_record_count(engine, endpoint: str):
+def _get_endpoint_record_count(engine: object, endpoint: str):
     try:
         result = engine.execute(f"SELECT COUNT(*) from {endpoint}")
         count, = result.fetchone()
@@ -21,7 +21,7 @@ def _get_endpoint_record_count(engine, endpoint: str):
     
     return count
 
-def generate_endpoints_blob(engine, api_url: str, endpoints: list, mappings={}):
+def generate_endpoints_blob(engine: object, api_url: str, endpoints: list, mappings={}):
     endpoints_blob = {'endpoints': []}
     for endpoint in endpoints:
         try:
