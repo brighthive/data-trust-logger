@@ -11,3 +11,6 @@
 
 # sphinx artifacts
 **/docs/build
+
+# config files
+*config.json

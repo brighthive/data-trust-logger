@@ -46,3 +46,5 @@ def test_get_mci_count_fail(client, mocker):
 
     for endpoint in endpoints:
         expect(endpoint['record_count']).to(equal('Database error'))
+
+# TEST API endpoints (mock the endpoints...)
