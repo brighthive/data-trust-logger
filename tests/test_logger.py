@@ -7,17 +7,11 @@ from expects import expect, be, equal, have_key
 
 
 class TestLogger:
-    def test_get_mci_endpoints(self, client):
-        response = client.get('/health/mci')
-        body = response.json
-        expect(response.status_code).to(be(200))
-        expect(body).to(have_key('response'))
-
-    def test_get_data_resource_endpoints(self, client):
-        response = client.get('/health/data_resources')
-        body = response.json
-        expect(response.status_code).to(be(200))
-        expect(body).to(have_key('response'))
+    # def test_get_data_resource_endpoints(self, client):
+    #     response = client.get('/health/data_resources')
+    #     body = response.json
+    #     expect(response.status_code).to(be(200))
+    #     expect(body).to(have_key('response'))
 
     def test_post_log(self, client):
         headers = {'content-type': 'application/json'}
