@@ -29,7 +29,7 @@ def test_get_data_resources_endpoints(client, mocker):
 def test_get_data_resources_count(client, mocker):
     # This test mocks the behavior of the sqlalchemy engine.
     # For unit tests, these mocks enable testing the response object, without spinning up
-    # a database for the MCI. Integration and E2E, however, should find an alternative strategy.
+    # a database for the DR API. Integration and E2E, however, should find an alternative strategy.
     fake_count = 4
     mocker.patch("sqlalchemy.engine.Engine.execute", return_value=ResultProxy)
     mocker.patch("sqlalchemy.engine.ResultProxy.fetchone", return_value=(fake_count,))
