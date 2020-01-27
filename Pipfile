@@ -9,12 +9,16 @@ autopep8 = "*"
 pytest = "*"
 pytest-cov = "*"
 expects = "*"
+pytest-mock = "*"
 
 [packages]
 flask = "*"
 flask-restful = "*"
 flask-cors = "*"
 gunicorn = "*"
+sqlalchemy = "*"
+psycopg2-binary = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"

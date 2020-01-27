@@ -1,0 +1,1 @@
+from data_trust_logger.config.config import ConfigurationFactory

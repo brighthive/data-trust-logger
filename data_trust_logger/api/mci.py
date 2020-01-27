@@ -5,10 +5,14 @@ A simple API for returning health statistics from MCI.
 """
 
 from flask import Blueprint, request
-from flask_restful import Resource, Api
+from flask_restful import Api, Resource
+from sqlalchemy import create_engine
 
 import data_trust_logger.utilities.responses as resp
-import data_trust_logger.utilities.fake_results as fake
+from data_trust_logger.config import ConfigurationFactory
+from data_trust_logger.utilities.health_helper import generate_endpoints_blob
+
+config = ConfigurationFactory.from_env()
 
 
 class MCIHealthCheckResource(Resource):
@@ -16,12 +20,18 @@ class MCIHealthCheckResource(Resource):
 
     def __init__(self):
         self.response = resp.ResponseBody()
-        self.endpoints = ['/mci/users', '/mci/source', '/mci/gender', '/mci/address', '/mci/disposition', '/mci/ethnicity',
-                          '/mci/employment_status', '/mci/education_level']
+        self.endpoints = ['users', 'source', 'gender', 'address', 'disposition', 'ethnicity',
+                          'employment_status', 'education_level']
+        self.table_to_ep_mappings = {
+            'users': 'individual',
+            'ethnicity': 'ethnicity_race',
+        }
 
     def get(self):
-        # TODO: This method should retrieve values from the MCI in the future
-        return self.response.get_one_response(fake.generate_fake_results(self.endpoints))
+        engine = create_engine(config.mci_psql_uri)
+        endpoints_blob = generate_endpoints_blob(engine, config.mci_url, self.endpoints, self.table_to_ep_mappings)
+
+        return self.response.get_one_response(endpoints_blob)
 
 
 mci_health_bp = Blueprint('mci_health_ep', __name__)

@@ -5,10 +5,15 @@ A simple API for returning health statistics from Data Resources.
 """
 
 from flask import Blueprint, request
-from flask_restful import Resource, Api
+from flask_restful import Api, Resource
+from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 
 import data_trust_logger.utilities.responses as resp
-import data_trust_logger.utilities.fake_results as fake
+from data_trust_logger.config import ConfigurationFactory
+from data_trust_logger.utilities.health_helper import generate_endpoints_blob
+
+config = ConfigurationFactory.from_env()
 
 
 class DataResourcesHealthCheckResource(Resource):
@@ -16,11 +21,21 @@ class DataResourcesHealthCheckResource(Resource):
 
     def __init__(self):
         self.response = resp.ResponseBody()
-        self.endpoints = ['/programs', '/providers', '/credentials', '/referrals']
 
     def get(self):
-        # TODO: This method should retrieve values from the various data resource APIs in the future
-        return self.response.get_one_response(fake.generate_fake_results(self.endpoints))
+        engine = create_engine(config.dr_psql_uri)
+
+        try:
+            table_names = engine.table_names()
+        except OperationalError:
+            table_names = []
+
+        metatables = ['alembic_version', 'checksums', 'logs']
+        endpoints = [endpoint for endpoint in table_names if endpoint not in metatables and "\\" not in endpoint]
+        
+        endpoints_blob = generate_endpoints_blob(engine, config.dr_url, endpoints)
+
+        return self.response.get_one_response(endpoints_blob)
 
 
 data_resources_health_bp = Blueprint('data_resources_health_ep', __name__)
