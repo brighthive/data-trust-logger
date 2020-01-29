@@ -19,6 +19,7 @@ gunicorn = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
 requests = "*"
+gevent = "*"
 
 [requires]
 python_version = "3.8"

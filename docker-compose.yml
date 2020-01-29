@@ -1,0 +1,7 @@
+version: '3'
+services: 
+    data-trust-logger: 
+      image: brighthive/data-trust-logger:1.0.1-beta
+      ports:
+        - 8001:8000
+

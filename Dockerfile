@@ -1,4 +1,4 @@
-FROM python:3.8.0-slim
+FROM python:3.7-slim
 WORKDIR /data-trust-logger
 ADD data_trust_logger data_trust_logger
 ADD wsgi.py wsgi.py
