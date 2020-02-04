@@ -1,7 +1,10 @@
 #!/bin/bash
 
 if [ "$APP_ENV" == "DEVELOPMENT" ] || [ -z "$APP_ENV" ]; then
-    gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app --reload --worker-class gevent
+    python health_audit_runner.py &
+    DATA_MODEL_MANAGER_PID=$!
+    gunicorn -w 4 -b 0.0.0.0:8002 wsgi:app --reload --worker-class gevent
+    trap "kill -9 $DATA_MODEL_MANAGER_PID" EXIT
 else
     MAX_RETRIES=5
     WORKERS=4
