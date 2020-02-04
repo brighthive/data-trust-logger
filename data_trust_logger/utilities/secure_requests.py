@@ -13,7 +13,7 @@ from data_trust_logger.config import ConfigurationFactory
 config = ConfigurationFactory.from_env()
 
 
-def _get_access_token():
+def get_access_token():
     """ Retrieves an OAuth 2.0 access token from the OAuth 2.0 provider.
     Note:
         At present, we use Auth0 as our OAuth 2.0 provider.
@@ -38,7 +38,7 @@ def _get_access_token():
     return token
 
 
-def secure_get(url: str):
+def secure_get(url: str, token: str):
     """Convenience method for GET requests against API resources.
     Args:
         url (str): The URL for the GET request.
@@ -47,7 +47,7 @@ def secure_get(url: str):
         None: If no results found.
     """
 
-    token = _get_access_token()
+    # token = _get_access_token()
 
     if token:
         headers = {

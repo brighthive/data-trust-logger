@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 
 import data_trust_logger.utilities.responses as resp
 from data_trust_logger.config import ConfigurationFactory
-from data_trust_logger.utilities.health_helper import generate_endpoints_blob
+# from data_trust_logger.utilities.health_helper import generate_endpoints_blob
 
 config = ConfigurationFactory.from_env()
 
@@ -29,7 +29,10 @@ class MCIHealthCheckResource(Resource):
 
     def get(self):
         engine = create_engine(config.mci_psql_uri)
-        endpoints_blob = generate_endpoints_blob(engine, config.mci_url, self.endpoints, self.table_to_ep_mappings)
+
+        # Rather than calling this function, we can retrieve the data from a database.
+        # endpoints_blob = generate_endpoints_blob(engine, config.mci_url, self.endpoints, self.table_to_ep_mappings)
+        endpoints_blob = {}
 
         return self.response.get_one_response(endpoints_blob)
 
