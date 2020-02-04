@@ -46,9 +46,6 @@ def secure_get(url: str, token: str):
         dict: Results of the query if found.
         None: If no results found.
     """
-
-    # token = _get_access_token()
-
     if token:
         headers = {
             'content-type': 'application/json', 
