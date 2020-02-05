@@ -3,6 +3,8 @@
 A simple API for returning health statistics from Data Resources.
 
 """
+import json
+import os
 
 from flask import Blueprint, request
 from flask_restful import Api, Resource
@@ -11,7 +13,6 @@ from sqlalchemy.exc import OperationalError
 
 import data_trust_logger.utilities.responses as resp
 from data_trust_logger.config import ConfigurationFactory
-# from data_trust_logger.utilities.health_helper import generate_endpoints_blob
 
 config = ConfigurationFactory.from_env()
 
@@ -23,20 +24,13 @@ class DataResourcesHealthCheckResource(Resource):
         self.response = resp.ResponseBody()
 
     def get(self):
-        engine = create_engine(config.dr_psql_uri)
+        metrics_data = {}
+        health_audit_directory = os.path.abspath("data_trust_logger/health_audit")
 
-        try:
-            table_names = engine.table_names()
-        except OperationalError:
-            table_names = []
+        with open(f'{health_audit_directory}/metrics_blob.json') as json_data:
+            metrics_data = json.load(json_data)
 
-        metatables = ['alembic_version', 'checksums', 'logs']
-        endpoints = [endpoint for endpoint in table_names if endpoint not in metatables and "\\" not in endpoint]
-
-        # endpoints_blob = generate_endpoints_blob(engine, config.dr_url, endpoints)
-        endpoints_blob = {}
-
-        return self.response.get_one_response(endpoints_blob)
+        return self.response.get_one_response(metrics_data)
 
 
 data_resources_health_bp = Blueprint('data_resources_health_ep', __name__)
