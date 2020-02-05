@@ -1,7 +1,9 @@
 '''
-This script runs the Data Model Manager in its own
-thread, separate from the web application that will most likely have multiple
-workers.
+This script runs the Health Auditor in its own thread, 
+independent of the Flask application. 
+But why? The `cmd.sh` script serves the Flask app with multiple gunicorn workers. 
+The Health Auditor should not be served by more than one worker (which would put 
+unnecessary load on the MCI and DR APIs).
 '''
 
 from threading import Thread
