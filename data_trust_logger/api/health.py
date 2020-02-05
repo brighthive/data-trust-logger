@@ -4,7 +4,6 @@ A simple API for returning health metrics about the MCI and DR APIs.
 
 """
 import json
-import os
 
 from flask import Blueprint, request
 from flask_restful import Api, Resource
@@ -26,10 +25,8 @@ class HealthAuditResource(Resource):
     def get(self):
         metrics_data = {}
 
-        with open('/tmp/metrics_blob.json.tmp', 'w+') as json_data:
+        with open('/tmp/metrics_blob.json') as json_data:
             metrics_data = json.load(json_data)
-        
-        os.replace('/tmp/metrics_blob.json.tmp', '/tmp/metrics_blob.json')
 
         return self.response.get_one_response(metrics_data)
 

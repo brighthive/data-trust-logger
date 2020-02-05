@@ -1,12 +1,13 @@
 import json
-from time import sleep
-
+import os
 from threading import Thread
+from time import sleep
 
 from data_trust_logger.health_audit.data_resources_collector import \
     instantiate_data_resources_collector
 from data_trust_logger.health_audit.mci_collector import \
     instantiate_mci_collector
+
 
 class HealthAuditor(Thread):
     def __init__(self):
@@ -25,11 +26,9 @@ class HealthAuditor(Thread):
                 "data_resources_metrics": data_resources_metrics
             }
 
-            with open('/tmp/metrics_blob.json', 'w') as f:
+            with open('/tmp/metrics_blob.json.tmp', 'w+') as f:
                 json.dump(metrics_blob, f)
+            
+            os.replace('/tmp/metrics_blob.json.tmp', '/tmp/metrics_blob.json')
 
             sleep(60)
-
-
-
-
