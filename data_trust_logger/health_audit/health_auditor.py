@@ -16,9 +16,9 @@ class HealthAuditor(Thread):
     def audit(self):
         while True:
             mci_collector = instantiate_mci_collector()
-            data_resources_collector = instantiate_data_resources_collector()
-
             mci_metrics = mci_collector.collect_metrics()
+            
+            data_resources_collector = instantiate_data_resources_collector()
             data_resources_metrics = data_resources_collector.collect_metrics()
 
             metrics_blob = {

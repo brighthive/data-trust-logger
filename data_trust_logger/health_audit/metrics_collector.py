@@ -16,9 +16,10 @@ class HealthMetricsCollector(object):
         try:
             response = secure_requests.secure_get(api_ep, token)
             status = response.status_code
-            last_accessed = datetime.utcnow().strftime('%Y-%m-%d %H:%M')
         except Exception:
             status = 503
+        
+        last_accessed = datetime.utcnow().strftime('%Y-%m-%d %H:%M')
         
         return status, last_accessed
 

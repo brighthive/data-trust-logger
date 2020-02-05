@@ -8,18 +8,25 @@ from data_trust_logger.health_audit.metrics_collector import \
 config = ConfigurationFactory.from_env()
 
 def instantiate_data_resources_collector():
-    data_resources_engine = create_engine(config.dr_psql_uri)
-    data_resources_url = config.dr_url
     try:
-        table_names = data_resources_engine.table_names()
-    except OperationalError:
+        # create_engine() itself does not establish a DB connection.
+        # We call `connect()` to assess the database health early on.
+        data_resources_engine = create_engine(config.dr_psql_uri)
+        data_resources_engine.connect()
+    except (ValueError, OperationalError):
+        data_resources_engine = None
         table_names = []
+    else:
+        # Deriving the endpoints from the database work fine, for now.
+        # However, we eventually want another strategy for getting the endpoints,
+        # i.e., a strategy not dependent on the database.
+        table_names = data_resources_engine.table_names()
 
     metatables = ['alembic_version', 'checksums', 'logs']
     data_resources_endpoints = [endpoint for endpoint in table_names if endpoint not in metatables and "\\" not in endpoint]
 
     return HealthMetricsCollector(
         engine=data_resources_engine, 
-        api_url=data_resources_url,
+        api_url=config.dr_url,
         endpoints=data_resources_endpoints
     )
