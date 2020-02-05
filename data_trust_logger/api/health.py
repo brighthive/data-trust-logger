@@ -1,6 +1,6 @@
-"""Data Resources Health Check API.
+"""Health Audit API.
 
-A simple API for returning health statistics from Data Resources.
+A simple API for returning health metrics about the MCI and DR APIs.
 
 """
 import json
@@ -17,8 +17,8 @@ from data_trust_logger.config import ConfigurationFactory
 config = ConfigurationFactory.from_env()
 
 
-class DataResourcesHealthCheckResource(Resource):
-    """Health Check API."""
+class HealthAuditResource(Resource):
+    """Health Audit API."""
 
     def __init__(self):
         self.response = resp.ResponseBody()
@@ -33,6 +33,6 @@ class DataResourcesHealthCheckResource(Resource):
         return self.response.get_one_response(metrics_data)
 
 
-data_resources_health_bp = Blueprint('data_resources_health_ep', __name__)
-data_resources_health_api = Api(data_resources_health_bp)
-data_resources_health_api.add_resource(DataResourcesHealthCheckResource, '/health/data_resources')
+health_bp = Blueprint('health_ep', __name__)
+health_api = Api(health_bp)
+health_api.add_resource(HealthAuditResource, '/health')
