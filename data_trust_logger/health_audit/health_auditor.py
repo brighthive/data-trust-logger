@@ -1,6 +1,5 @@
 import json
 from time import sleep
-import os
 
 from threading import Thread
 
@@ -26,8 +25,7 @@ class HealthAuditor(Thread):
                 "data_resources_metrics": data_resources_metrics
             }
 
-            this_directory = os.path.abspath(os.path.dirname(__file__))
-            with open(f'{this_directory}/metrics_blob.json', 'w') as f:
+            with open('/tmp/metrics_blob.json', 'w') as f:
                 json.dump(metrics_blob, f)
 
             sleep(60)

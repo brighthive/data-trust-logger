@@ -25,10 +25,11 @@ class HealthAuditResource(Resource):
 
     def get(self):
         metrics_data = {}
-        health_audit_directory = os.path.abspath("data_trust_logger/health_audit")
 
-        with open(f'{health_audit_directory}/metrics_blob.json') as json_data:
+        with open('/tmp/metrics_blob.json.tmp', 'w+') as json_data:
             metrics_data = json.load(json_data)
+        
+        os.replace('/tmp/metrics_blob.json.tmp', '/tmp/metrics_blob.json')
 
         return self.response.get_one_response(metrics_data)
 
