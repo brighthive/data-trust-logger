@@ -1,9 +1,8 @@
 """Data Trust Logger Application."""
-
 from flask import Flask
 from flask_cors import CORS
 
-from data_trust_logger.api import mci_health_bp, data_resources_health_bp, log_bp
+from data_trust_logger.api import health_bp, log_bp
 
 
 def create_app(environment: str = None):
@@ -17,8 +16,7 @@ def create_app(environment: str = None):
     app = Flask(__name__)
     CORS(app)
 
-    app.register_blueprint(mci_health_bp)
-    app.register_blueprint(data_resources_health_bp)
+    app.register_blueprint(health_bp)
     app.register_blueprint(log_bp)
 
     return app

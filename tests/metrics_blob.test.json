@@ -1,0 +1,24 @@
+{
+    "mci_metrics": [
+        {
+            "endpoint": "users", 
+            "record_count": 3000, 
+            "endpoint_health": 200, 
+            "last_accessed": "2020-02-05 21:15"
+        }, 
+        {
+            "endpoint": "gender", 
+            "record_count": -1, 
+            "endpoint_health": 503, 
+            "last_accessed": "2020-02-05 21:15"
+        }
+    ],
+    "data_resources_metrics": [
+        {
+            "endpoint": "programs", 
+            "record_count": 120, 
+            "endpoint_health": 200, 
+            "last_accessed": "2020-02-05 21:15"
+        }
+    ]
+}
