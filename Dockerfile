@@ -5,6 +5,7 @@ ADD wsgi.py wsgi.py
 ADD Pipfile Pipfile
 ADD Pipfile.lock Pipfile.lock
 RUN pip install pipenv && pipenv install --system && pipenv install --dev --system
+ADD health_audit_runner.py health_audit_runner.py
 ADD cmd.sh cmd.sh
 RUN chmod +x cmd.sh
 ENTRYPOINT [ "/data-trust-logger/cmd.sh" ]

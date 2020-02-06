@@ -1,5 +1,5 @@
 {
-    "local_testing": {
+    "local": {
         "data_resources": {
             "dr_url": "http://0.0.0.0:8001",
             "dr_psql_user": "test_user",

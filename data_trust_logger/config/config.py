@@ -47,7 +47,7 @@ class Configuration(object):
             raise ConfigurationError(
                 'Failed to load configuration file {}. Please check the configuration file.'.format(config_file))
 
-    def from_json(self, environment='development'):
+    def from_json(self, environment='local'):
         """Load application configuration from JSON object based on the configuration type.
         Args:
             environment (str): The environment to load.
@@ -57,6 +57,7 @@ class Configuration(object):
 
         config_file = self.find_json_config_file()
         data = self.load_json_config(config_file)
+
         if environment in data.keys():
             fields = data[environment]
             try:
@@ -107,14 +108,14 @@ class Configuration(object):
                 'Cannot find environment \'{}\' in JSON configuration.')
 
 class LocalConfiguration(Configuration):
-    """Development configuration class."""
+    """Configuration class for local development."""
     def __init__(self):
         self.from_json()
         self.debug = True
         self.testing = True
 
 class DevelopmentTestingConfiguration(Configuration):
-    """Development configuration class."""
+    """Configuration class for deployment of app on the Dev Testing server."""
 
     def __init__(self):
         self.from_json()
@@ -122,7 +123,7 @@ class DevelopmentTestingConfiguration(Configuration):
         self.testing = False
 
 class ProductionConfiguration(Configuration):
-    """Production configuratuon class."""
+    """Configuratuon class for production deployment."""
 
     def __init__(self):
         self.from_env()
@@ -142,7 +143,7 @@ class ConfigurationFactory(object):
     @staticmethod
     def from_env():
         """Retrieve configuration based on environment settings.
-        Provides a configuration object based on the settings found in the `APP_ENV` variable. Defaults to the `development`
+        Provides a configuration object based on the settings found in the `APP_ENV` variable. Defaults to the `local`
         environment if the variable is not set.
         Returns:
             object: Configuration object based on the configuration environment found in the `APP_ENV` environment variable.
