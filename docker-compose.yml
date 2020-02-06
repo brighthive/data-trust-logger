@@ -6,9 +6,3 @@ services:
         - APP_ENV=DEVELOPMENT_TESTING
       ports:
         - 8002:8000
-    health-auditor:
-      image: brighthive/data-trust-logger:1.0.1-beta
-      environment:
-        - APP_ENV=DEVELOPMENT_TESTING
-      command: '--health-audit'
-

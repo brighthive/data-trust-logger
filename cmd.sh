@@ -6,10 +6,6 @@ if [ "$APP_ENV" == "LOCAL" ] || [ -z "$APP_ENV" ]; then
     trap "kill -9 $HEALTH_AUDIT_PID" EXIT
 else
     WORKERS=4
-    MODE=$@
-    if [ "$MODE" == "--health-audit" ]; then
-        python health_audit_runner.py
-    else
-        gunicorn -b 0.0.0.0 -w $WORKERS wsgi:app --worker-class gevent
-    fi
+    python health_audit_runner.py &
+    gunicorn -b 0.0.0.0 -w $WORKERS wsgi:app --worker-class gevent
 fi
