@@ -12,8 +12,5 @@
 # sphinx artifacts
 **/docs/build
 
-# auditor artifacts
-metrics_blob.json
-
 # config files
 *config.json
