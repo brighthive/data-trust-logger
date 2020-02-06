@@ -2,7 +2,6 @@ import json
 import re
 
 from expects import be, equal, expect, have_key, have_len
-from mock import patch
 from sqlalchemy.engine import ResultProxy
 
 
