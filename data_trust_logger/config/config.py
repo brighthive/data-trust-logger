@@ -106,8 +106,14 @@ class Configuration(object):
             raise ConfigurationError(
                 'Cannot find environment \'{}\' in JSON configuration.')
 
+class LocalConfiguration(Configuration):
+    """Development configuration class."""
+    def __init__(self):
+        self.from_json()
+        self.debug = True
+        self.testing = True
 
-class DevelopmentConfiguration(Configuration):
+class DevelopmentTestingConfiguration(Configuration):
     """Development configuration class."""
 
     def __init__(self):
@@ -115,12 +121,23 @@ class DevelopmentConfiguration(Configuration):
         self.debug = True
         self.testing = False
 
+class ProductionConfiguration(Configuration):
+    """Production configuratuon class."""
+
+    def __init__(self):
+        self.from_env()
+        self.debug = False
+        self.testing = False
 
 class ConfigurationFactory(object):
     @staticmethod
     def get_config(config_type: str):
-        if config_type.upper() == 'DEVELOPMENT':
-            return DevelopmentConfiguration()
+        if config_type.upper() == 'LOCAL':
+            return LocalConfiguration()
+        if config_type.upper() == 'DEVELOPMENT_TESTING':
+            return DevelopmentTestingConfiguration()
+        if config_type.upper() == 'PRODUCTION':
+            return ProductionConfiguration()
 
     @staticmethod
     def from_env():
@@ -130,6 +147,6 @@ class ConfigurationFactory(object):
         Returns:
             object: Configuration object based on the configuration environment found in the `APP_ENV` environment variable.
         """
-        environment = os.getenv('APP_ENV', 'DEVELOPMENT')
+        environment = os.getenv('APP_ENV', 'LOCAL')
 
         return ConfigurationFactory.get_config(environment)

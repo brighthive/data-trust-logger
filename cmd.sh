@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$APP_ENV" == "DEVELOPMENT" ] || [ -z "$APP_ENV" ]; then
+if [ "$APP_ENV" == "LOCAL" ] || [ -z "$APP_ENV" ]; then
     python health_audit_runner.py &
     HEALTH_AUDIT_PID=$!
     gunicorn -w 4 -b 0.0.0.0:8002 wsgi:app --reload --worker-class gevent

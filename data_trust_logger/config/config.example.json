@@ -1,5 +1,5 @@
 {
-    "development": {
+    "local_testing": {
         "data_resources": {
             "dr_url": "http://0.0.0.0:8001",
             "dr_psql_user": "test_user",
@@ -22,5 +22,7 @@
             "audience": "http://localhost:8000",
             "oauth2_url": "https://<url_to_authserver>/oauth/token"
         }
-    }
+    },
+    "development_testing": { },
+    "production": {}
 }
