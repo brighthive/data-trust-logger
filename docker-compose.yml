@@ -3,6 +3,6 @@ services:
     data-trust-logger: 
       image: brighthive/data-trust-logger:1.0.1-beta
       environment:
-        - APP_ENV=DEVELOPMENT_TESTING
+        - APP_ENV=LOCAL
       ports:
         - 8002:8000
