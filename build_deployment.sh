@@ -1,6 +1,6 @@
 ORGANIZATION=brighthive
 IMAGE_NAME=data-trust-logger
-VERSION=0.1.0-2664a
+VERSION=0.1.0-76e27
 AWS_ECR_REPO=396527728813.dkr.ecr.us-east-2.amazonaws.com
 
 docker build -t $ORGANIZATION/$IMAGE_NAME:$VERSION -f Dockerfile .
