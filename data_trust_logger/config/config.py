@@ -110,7 +110,7 @@ class Configuration(object):
 class LocalConfiguration(Configuration):
     """Configuration class for local development."""
     def __init__(self):
-        self.from_json()
+        self.from_json('local')
         self.debug = True
         self.testing = True
 
@@ -118,7 +118,7 @@ class DevelopmentTestingConfiguration(Configuration):
     """Configuration class for deployment of app on the Dev Testing server."""
 
     def __init__(self):
-        self.from_json()
+        self.from_json('development_testing')
         self.debug = True
         self.testing = False
 
@@ -126,7 +126,7 @@ class ProductionConfiguration(Configuration):
     """Configuratuon class for production deployment."""
 
     def __init__(self):
-        self.from_env()
+        self.from_json('production')
         self.debug = False
         self.testing = False
 
