@@ -80,11 +80,14 @@ class Configuration(object):
 
                 self.client_id = fields['oauth2']['client_id']
                 self.client_secret = fields['oauth2']['client_secret']
+                
+                oauth2_url_base = fields['oauth2']['oauth2_url']
+                self.oauth2_url = f"{oauth2_url_base}/oauth/token"
+                self.oauth2_jwks_url = f"{oauth2_url_base}/.well-known/jwks.json"
+                self.oauth2_url_base = oauth2_url_base
                 self.oauth2_audience = fields['oauth2']['oauth2_audience']
-                self.oauth2_url = fields['oauth2']['oauth2_url']
                 self.oauth2_provider = fields['oauth2']['oauth2_provider']
                 self.oauth2_algorithms = fields['oauth2']['oauth2_algorithms']
-                self.oauth2_jwks_url = f"{self.oauth2_url}/.well-known/jwks.json"
 
                 self.environment = environment
                 self.debug = True
@@ -122,7 +125,7 @@ class Configuration(object):
         """
         auth_config = AuthLibConfiguration(
             provider=self.oauth2_provider, 
-            base_url=self.oauth2_url,
+            base_url=self.oauth2_url_base,
             jwks_url=self.oauth2_jwks_url, 
             algorithms=self.oauth2_algorithms, 
             audience=self.oauth2_audience)
