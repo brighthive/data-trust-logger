@@ -20,6 +20,7 @@ sqlalchemy = "*"
 psycopg2-binary = "*"
 requests = "*"
 gevent = "*"
+brighthive-authlib = "*"
 
 [requires]
 python_version = "3.8"

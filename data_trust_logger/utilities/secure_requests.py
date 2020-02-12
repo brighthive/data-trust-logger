@@ -24,7 +24,7 @@ def get_access_token():
     data = {
         'client_id': config.client_id, 
         'client_secret': config.client_secret,
-        'audience': config.audience, 
+        'audience': config.oauth2_audience, 
         'grant_type': 'client_credentials'
     }
 

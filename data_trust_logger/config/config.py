@@ -1,5 +1,8 @@
-import os
 import json
+import os
+
+from brighthive_authlib import AuthLibConfiguration, OAuth2ProviderFactory
+
 
 class ConfigurationError(Exception):
     pass
@@ -75,10 +78,13 @@ class Configuration(object):
                 self.mci_psql_port = fields['master_client_index']['mci_psql_port']
                 self.mci_psql_database = fields['master_client_index']['mci_psql_database']
 
-                self.client_id = fields['auth_access']['client_id']
-                self.client_secret = fields['auth_access']['client_secret']
-                self.audience = fields['auth_access']['audience']
-                self.oauth2_url = fields['auth_access']['oauth2_url']
+                self.client_id = fields['oauth2']['client_id']
+                self.client_secret = fields['oauth2']['client_secret']
+                self.oauth2_audience = fields['oauth2']['oauth2_audience']
+                self.oauth2_url = fields['oauth2']['oauth2_url']
+                self.oauth2_provider = fields['oauth2']['oauth2_provider']
+                self.oauth2_algorithms = fields['oauth2']['oauth2_algorithms']
+                self.oauth2_jwks_url = f"{self.oauth2_url}/.well-known/jwks.json"
 
                 self.environment = environment
                 self.debug = True
@@ -103,9 +109,29 @@ class Configuration(object):
                     self.mci_psql_database
                 )
 
+                self.oauth2_provider = self.get_oauth2_provider()
+
         else:
             raise ConfigurationError(
                 'Cannot find environment \'{}\' in JSON configuration.')
+    
+    def get_oauth2_provider(self):
+        """Retrieve the OAuth 2.0 Provider.
+        Return:
+            object: The OAuth 2.0 Provider.
+        """
+        auth_config = AuthLibConfiguration(
+            provider=self.oauth2_provider, 
+            base_url=self.oauth2_url,
+            jwks_url=self.oauth2_jwks_url, 
+            algorithms=self.oauth2_algorithms, 
+            audience=self.oauth2_audience)
+
+        oauth2_provider = OAuth2ProviderFactory.get_provider(
+            self.oauth2_provider, auth_config)
+
+        return oauth2_provider
+
 
 class LocalConfiguration(Configuration):
     """Configuration class for local development."""

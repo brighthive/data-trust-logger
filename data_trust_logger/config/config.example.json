@@ -16,11 +16,13 @@
             "mci_psql_port": "5432",
             "mci_psql_database": "mci_dev"
         },
-        "auth_access": {
-            "client_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx", 
-            "client_secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-            "audience": "http://localhost:8000",
-            "oauth2_url": "https://<url_to_authserver>/oauth/token"
+        "oauth2": {
+            "client_id": "xxxxxxxxxx", 
+            "client_secret": "xxxxxxxxxx",
+            "oauth2_audience": "http://localhost:8000",
+            "oauth2_url": "<url>/oauth/token",
+            "oauth2_provider": "",
+            "oauth2_algorithms": ""
         }
     },
     "development_testing": { },
