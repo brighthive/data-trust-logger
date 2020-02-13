@@ -23,15 +23,10 @@ def instantiate_mci_collector():
         mci_engine = None
     
     mci_tablenames = ['individual', 'source', 'gender', 'address', 'disposition', 'ethnicity_race', 'employment_status', 'education_level']
-    # Key (table name): Value (endpoint name)
-    table_to_ep_mappings = {
-        'individual': 'users',
-        'ethnicity_race': 'ethnicity',
-    }
-
+    
     return HealthMetricsCollector(
         engine=mci_engine, 
         api_url=config.mci_url,
         tablenames=mci_tablenames,
-        table_to_ep_mappings=table_to_ep_mappings
+        table_to_ep_mappings=config.mci_mappings
     )
