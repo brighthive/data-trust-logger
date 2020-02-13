@@ -29,10 +29,11 @@ def instantiate_data_resources_collector():
         table_names = data_resources_engine.table_names()
 
     metatables = ['alembic_version', 'checksums', 'logs']
-    data_resources_endpoints = [endpoint for endpoint in table_names if endpoint not in metatables and "\\" not in endpoint]
+    data_resources_tablenames = [endpoint for endpoint in table_names if endpoint not in metatables and "\\" not in endpoint]
 
     return HealthMetricsCollector(
         engine=data_resources_engine, 
         api_url=config.dr_url,
-        endpoints=data_resources_endpoints
+        tablenames=data_resources_tablenames,
+        table_to_ep_mappings=config.data_resources_mappings
     )

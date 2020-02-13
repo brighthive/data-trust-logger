@@ -6,7 +6,10 @@
             "dr_psql_password": "test_password",
             "dr_psql_hostname": "localhost",
             "dr_psql_port": "5433",
-            "dr_psql_database": "data_resource_dev"
+            "dr_psql_database": "data_resource_dev",
+            "table_to_ep_mappings": {
+                "programs": "myjourney_programs"
+            }
         },
         "master_client_index": {
             "mci_url": "http://0.0.0.0:8000",
@@ -14,7 +17,11 @@
             "mci_psql_password": "test_password",
             "mci_psql_hostname": "localhost" ,
             "mci_psql_port": "5432",
-            "mci_psql_database": "mci_dev"
+            "mci_psql_database": "mci_dev",
+            "table_to_ep_mappings": {
+                "individual": "users",
+                "ethnicity_race": "ethnicity"
+            }
         },
         "oauth2": {
             "client_id": "xxxxxxxxxx", 
