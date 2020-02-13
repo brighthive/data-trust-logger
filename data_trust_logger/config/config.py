@@ -67,6 +67,7 @@ class Configuration(object):
                 self.dr_psql_hostname = fields['data_resources']['dr_psql_hostname']
                 self.dr_psql_port = fields['data_resources']['dr_psql_port']
                 self.dr_psql_database = fields['data_resources']['dr_psql_database']
+                self.data_resources_mappings = fields['data_resources']['table_to_ep_mappings']
 
                 self.mci_url = fields['master_client_index']['mci_url']
                 self.mci_psql_user = fields['master_client_index']['mci_psql_user']
@@ -74,6 +75,7 @@ class Configuration(object):
                 self.mci_psql_hostname = fields['master_client_index']['mci_psql_hostname']
                 self.mci_psql_port = fields['master_client_index']['mci_psql_port']
                 self.mci_psql_database = fields['master_client_index']['mci_psql_database']
+                self.mci_mappings = fields['master_client_index']['table_to_ep_mappings']
 
                 self.client_id = fields['auth_access']['client_id']
                 self.client_secret = fields['auth_access']['client_secret']

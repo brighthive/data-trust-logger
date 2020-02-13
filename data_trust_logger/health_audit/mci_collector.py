@@ -22,15 +22,11 @@ def instantiate_mci_collector():
         logger.error(error)
         mci_engine = None
     
-    mci_endpoints = ['users', 'source', 'gender', 'address', 'disposition', 'ethnicity', 'employment_status', 'education_level']
-    table_to_ep_mappings = {
-        'users': 'individual',
-        'ethnicity': 'ethnicity_race',
-    }
-
+    mci_tablenames = ['individual', 'source', 'gender', 'address', 'disposition', 'ethnicity_race', 'employment_status', 'education_level']
+    
     return HealthMetricsCollector(
         engine=mci_engine, 
         api_url=config.mci_url,
-        endpoints=mci_endpoints,
-        table_to_ep_mappings=table_to_ep_mappings
+        tablenames=mci_tablenames,
+        table_to_ep_mappings=config.mci_mappings
     )
