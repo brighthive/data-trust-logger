@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import requests
 
@@ -19,7 +19,7 @@ class HealthMetricsCollector(object):
         except Exception:
             status = 503
         
-        last_accessed = datetime.utcnow().strftime('%Y-%m-%d %H:%M')
+        last_accessed = str(datetime.now(timezone.utc))
         
         return status, last_accessed
 
