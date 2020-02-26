@@ -83,14 +83,12 @@ class Configuration(object):
                 self.client_id = fields['oauth2']['client_id']
                 self.client_secret = fields['oauth2']['client_secret']
                 
-                oauth2_url_base = fields['oauth2']['oauth2_url']
-                self.oauth2_url = f"{oauth2_url_base}/oauth/token"
-                self.oauth2_jwks_url = f"{oauth2_url_base}/.well-known/jwks.json"
-                self.oauth2_url_base = oauth2_url_base
-                self.oauth2_audience = fields['oauth2']['oauth2_audience']
-                self.oauth2_provider = fields['oauth2']['oauth2_provider']
-                self.oauth2_algorithms = fields['oauth2']['oauth2_algorithms']
-
+                self.oauth2_url_base = fields['oauth2']['oauth2_url']
+                self.oauth2_url = f"{self.oauth2_url_base}/oauth/token"
+                self.oauth2_audience = fields["oauth2"]["oauth2_audience"]
+                self.brighthive_auth_url = fields['brighthive_auth']['brighthive_auth_url']
+                self.brighthive_auth_provider = fields["brighthive_auth"]["brighthive_auth_provider"]
+                
                 self.environment = environment
                 self.debug = True
                 self.testing = True
@@ -126,14 +124,11 @@ class Configuration(object):
             object: The OAuth 2.0 Provider.
         """
         auth_config = AuthLibConfiguration(
-            provider=self.oauth2_provider, 
-            base_url=self.oauth2_url_base,
-            jwks_url=self.oauth2_jwks_url, 
-            algorithms=self.oauth2_algorithms, 
-            audience=self.oauth2_audience)
+            provider=self.brighthive_auth_provider, 
+            base_url=self.brighthive_auth_url)
 
         oauth2_provider = OAuth2ProviderFactory.get_provider(
-            self.oauth2_provider, auth_config)
+            self.brighthive_auth_provider, auth_config)
 
         return oauth2_provider
 

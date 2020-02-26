@@ -26,10 +26,8 @@
         "oauth2": {
             "client_id": "xxxxxxxxxx", 
             "client_secret": "xxxxxxxxxx",
-            "oauth2_audience": "http://localhost:8000",
             "oauth2_url": "",
-            "oauth2_provider": "",
-            "oauth2_algorithms": ""
+            "oauth2_provider": ""
         }
     },
     "development_testing": { },
