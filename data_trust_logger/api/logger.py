@@ -5,13 +5,18 @@ is to enable web applications (such as Facet) to have a means of providing outpu
 
 """
 
-import logging
 import json
+import logging
 import sys
+
+from brighthive_authlib import token_required
 from flask import Blueprint, request
-from flask_restful import Resource, Api
+from flask_restful import Api, Resource
 
 import data_trust_logger.utilities.responses as resp
+from data_trust_logger.config import ConfigurationFactory
+
+config = ConfigurationFactory.from_env()
 
 
 class LogResource(Resource):
@@ -28,6 +33,7 @@ class LogResource(Resource):
 
         self.log.addHandler(log_handler)
 
+    @token_required(config.oauth2_provider)
     def post(self):
         try:
             data = request.get_json(force=True)

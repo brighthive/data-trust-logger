@@ -5,6 +5,7 @@ A simple API for returning health metrics about the MCI and DR APIs.
 """
 import json
 
+from brighthive_authlib import token_required
 from flask import Blueprint, request
 from flask_restful import Api, Resource
 from sqlalchemy import create_engine
@@ -22,6 +23,7 @@ class HealthAuditResource(Resource):
     def __init__(self):
         self.response = resp.ResponseBody()
 
+    @token_required(config.oauth2_provider)
     def get(self):
         metrics_data = {}
 
@@ -29,6 +31,7 @@ class HealthAuditResource(Resource):
             metrics_data = json.load(json_data)
 
         return self.response.get_one_response(metrics_data)
+
 
 
 health_bp = Blueprint('health_ep', __name__)
