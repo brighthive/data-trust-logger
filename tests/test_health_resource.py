@@ -6,6 +6,7 @@ from sqlalchemy.engine import ResultProxy
 
 
 def _healthcheck_response(client, metrics_blob, mocker):
+    mocker.patch('brighthive_authlib.providers.BrightHiveProvider.validate_token', return_value=True)
     mocker.patch("json.load", return_value=metrics_blob)
 
     response = client.get('/health')
