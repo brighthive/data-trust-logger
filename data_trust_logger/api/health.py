@@ -33,6 +33,7 @@ class HealthAuditResource(Resource):
         return self.response.get_one_response(metrics_data)
 
 
+
 health_bp = Blueprint('health_ep', __name__)
 health_api = Api(health_bp)
 health_api.add_resource(HealthAuditResource, '/health')

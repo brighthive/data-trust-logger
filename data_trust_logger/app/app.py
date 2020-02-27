@@ -11,13 +11,12 @@ from data_trust_logger.api import health_bp, log_bp
 
 
 def handle_errors(e):
-    print("Incoming error:", e)
     if isinstance(e, OAuth2ProviderError):
         response = jsonify({'message': 'Access Denied'})
         response.status_code = 401
         return response
     else:
-        response = jsonify({'error': 'An unknown error occured'})
+        response = jsonify({'error': 'An unknown error occurred'})
         response.status_code = 400
         return response
 
