@@ -1,9 +1,10 @@
 import re
 from unittest.mock import mock_open
-import requests_mock
+
 from expects import be, equal, expect, have_key, have_len
 
-from data_trust_logger.health_audit.mci_collector import instantiate_mci_collector
+from data_trust_logger.health_audit.mci_collector import \
+    instantiate_mci_collector
 
 
 def test_get_statuses_with_invalid_token(client, mocker):
