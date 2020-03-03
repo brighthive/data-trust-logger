@@ -25,8 +25,10 @@ class HealthMetricsCollector(object):
 
     def _get_endpoint_record_count(self, engine: object, endpoint: str):
         try:
-            result = engine.execute(f"SELECT COUNT(*) from {endpoint}")
+            connection = engine.connect()
+            result = connection.execute(f"SELECT COUNT(*) from {endpoint}")
             count, = result.fetchone()
+            connection.close()
         except Exception:
             count = -1
         
