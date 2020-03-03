@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 import requests
 
-from data_trust_logger.utilities import get_access_token, secure_requests
+from data_trust_logger.utilities import get_access_token, read_token, secure_requests
 
 
 class HealthMetricsCollector(object):
@@ -25,8 +25,10 @@ class HealthMetricsCollector(object):
 
     def _get_endpoint_record_count(self, engine: object, endpoint: str):
         try:
-            result = engine.execute(f"SELECT COUNT(*) from {endpoint}")
+            connection = engine.connect()
+            result = connection.execute(f"SELECT COUNT(*) from {endpoint}")
             count, = result.fetchone()
+            connection.close()
         except Exception:
             count = -1
         
@@ -34,7 +36,7 @@ class HealthMetricsCollector(object):
 
     def collect_metrics(self):
         metrics_list = []
-        token = get_access_token()
+        token = read_token()
 
         for table in self.tablenames:
             try:
@@ -42,8 +44,14 @@ class HealthMetricsCollector(object):
             except KeyError:
                 endpoint = table
             
-            status, last_accessed = self._get_endpoint_status(f"{self.api_url}/{endpoint}", token)
             count = self._get_endpoint_record_count(self.engine, table)
+            
+            # Request a new access token if the token has expired, i.e., the endpoint raises a 401.
+            status, last_accessed = self._get_endpoint_status(f"{self.api_url}/{endpoint}", token)
+            if status == 401:
+                get_access_token()
+                token = read_token() 
+                status, last_accessed = self._get_endpoint_status(f"{self.api_url}/{endpoint}", token)
             
             metrics_list.append({
                 'endpoint': endpoint,
