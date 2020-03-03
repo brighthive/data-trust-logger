@@ -70,7 +70,7 @@ def test_get_data_resources_count(mocker):
     for count in record_counts:
         assert count == seeded_count
 
-def test_get_mci_count_fail():
+def test_get_data_resources_count_fail():
     collector = instantiate_data_resources_collector()
     metrics = collector.collect_metrics()
 
@@ -79,7 +79,7 @@ def test_get_mci_count_fail():
     for count in record_counts:
         assert count == -1
 
-def test_get_mci_statuses(client):
+def test_get_data_resources_statuses(client):
     with requests_mock.Mocker() as m:
         matcher = re.compile('/programs')
         m.get(matcher, json={}, status_code=200)
