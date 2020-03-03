@@ -1,14 +1,12 @@
-import logging
-
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
 from data_trust_logger.config import ConfigurationFactory
 from data_trust_logger.health_audit.metrics_collector import \
     HealthMetricsCollector
+from data_trust_logger.utilities.basic_logger import basic_logger
 
 config = ConfigurationFactory.from_env()
-logger = logging.getLogger(__name__)
 
 
 def instantiate_data_resources_collector():
@@ -18,8 +16,8 @@ def instantiate_data_resources_collector():
         data_resources_engine = create_engine(config.dr_psql_uri)
         data_resources_engine.connect()
     except (ValueError, OperationalError) as error:
-        logger.error("Data Resources HealthMetricsCollector cannot connect to database.")
-        logger.error(error)
+        basic_logger.error("Data Resources HealthMetricsCollector cannot connect to database.")
+        basic_logger.error(error)
         data_resources_engine = None
         table_names = []
     else:

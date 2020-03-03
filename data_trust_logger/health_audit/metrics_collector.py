@@ -34,7 +34,6 @@ class HealthMetricsCollector(object):
 
     def collect_metrics(self):
         metrics_list = []
-
         token = read_token()
 
         for table in self.tablenames:
