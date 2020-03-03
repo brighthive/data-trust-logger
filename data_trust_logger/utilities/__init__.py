@@ -1,1 +1,1 @@
-from data_trust_logger.utilities.secure_requests import get_access_token, secure_get
+from data_trust_logger.utilities.secure_requests import get_access_token, read_token, secure_get
